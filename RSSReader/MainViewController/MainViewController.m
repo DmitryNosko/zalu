@@ -502,6 +502,8 @@ static NSString* FAVORITES_NEWS_LINKS = @"favoritiesNewsLinks.txt";
     };
 }
 
+
+
 - (void) feedResourceWasChosenHandlerMethod {
     __weak MainViewController* weakSelf = self;
     self.feedResourceWasChosenHandler = ^(FeedResource *resource) {
