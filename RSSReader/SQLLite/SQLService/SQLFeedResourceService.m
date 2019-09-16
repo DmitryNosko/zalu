@@ -6,23 +6,23 @@
 //  Copyright © 2019 Dzmitry Noska. All rights reserved.
 //
 
-#import "FeedResourceService.h"
-#import "FeedResourceRepository.h"
+#import "SQLFeedResourceService.h"
+#import "SQLFeedResourceRepository.h"
 
-@interface FeedResourceService()
-@property (strong, nonatomic) FeedResourceRepository* feedResourceRepository;
+@interface SQLFeedResourceService()
+@property (strong, nonatomic) SQLFeedResourceRepository* feedResourceRepository;
 @end
 
-@implementation FeedResourceService
+@implementation SQLFeedResourceService
 
 
-static FeedResourceService* shared;
+static SQLFeedResourceService* shared;
 
 +(instancetype) sharedFeedResourceService {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        shared = [FeedResourceService new];
-        shared.feedResourceRepository = [FeedResourceRepository sharedFeedResourceRepository];
+        shared = [SQLFeedResourceService new];
+        shared.feedResourceRepository = [SQLFeedResourceRepository sharedFeedResourceRepository];
     });
     return shared;
 }

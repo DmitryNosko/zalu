@@ -13,7 +13,7 @@
 #import "FeedResource.h"
 #import "FileManager.h"
 #import "ReachabilityStatusChecker.h"
-#import "FeedResourceService.h"
+#import "SQLFeedResourceService.h"
 
 @interface MenuViewController () <UITableViewDataSource, UITableViewDelegate, MenuHeaderViewListener, MenuTableViewCellListener>
 @property (strong, nonatomic) UITableView* tableView;
@@ -25,7 +25,7 @@
 static NSString* const URL_TO_PARSE = @"https://news.tut.by/rss/index.rss";
 static NSString* const CELL_IDENTIFIER = @"Cell";
 static NSString* const HEADER_IDENTIFIER = @"header";
-static NSString* const MENU_FILE_NAME = @"MainMenuFile.txt";
+//static NSString* const MENU_FILE_NAME = @"MainMenuFile.txt";
 static NSString* const DEFAULT_RESOURCE_FILE_NAME = @"tutbyportal";
 
 @implementation MenuViewController
@@ -40,11 +40,11 @@ static NSString* const DEFAULT_RESOURCE_FILE_NAME = @"tutbyportal";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    NSMutableArray<FeedResource *>* savedFeedResources = [[FeedResourceService sharedFeedResourceService] feedResources];
+    NSMutableArray<FeedResource *>* savedFeedResources = [[SQLFeedResourceService sharedFeedResourceService] feedResources];
     //NSMutableArray<FeedResource *>* savedFeedResources = [[FileManager sharedFileManager] readFeedResourceFile:MENU_FILE_NAME];
     if ([savedFeedResources count] == 0) {
         FeedResource* defaultResource = [[FeedResource alloc] initWithName:DEFAULT_RESOURCE_FILE_NAME url:[NSURL URLWithString:URL_TO_PARSE]];
-        [[FeedResourceService sharedFeedResourceService] addFeedResource:defaultResource];
+        [[SQLFeedResourceService sharedFeedResourceService] addFeedResource:defaultResource];
         //[[FileManager sharedFileManager] saveFeedResource:defaultResource toFileWithName:MENU_FILE_NAME];
         self.feedsResources = [[NSMutableArray alloc] initWithObjects:defaultResource, nil];
     } else {
@@ -147,9 +147,9 @@ static NSString* const DEFAULT_RESOURCE_FILE_NAME = @"tutbyportal";
                                                                  NSURL* urlForParse = [self.urlValidator parseFeedResoursecFromURL:[NSURL URLWithString:inputString]];
                                                                  if (urlForParse) {
                                                                      
-                                                                     FeedResource* resource = [[FeedResourceService sharedFeedResourceService] addFeedResource:[[FeedResource alloc] initWithName:feedTextField.text url:urlForParse]];
+                                                                     FeedResource* resource = [[SQLFeedResourceService sharedFeedResourceService] addFeedResource:[[FeedResource alloc] initWithName:feedTextField.text url:urlForParse]];
                                                                      //[[FileManager sharedFileManager] saveFeedResource:resource toFileWithName:MENU_FILE_NAME];
-                                                                     self.feedsResources = [[FeedResourceService sharedFeedResourceService] feedResources];
+                                                                     self.feedsResources = [[SQLFeedResourceService sharedFeedResourceService] feedResources];
                                                                      //self.feedsResources = [[FileManager sharedFileManager] readFeedResourceFile:MENU_FILE_NAME];
                                                                      [self.tableView reloadData];
                                                                      self.feedResourceWasAddedHandler(resource);
@@ -173,7 +173,7 @@ static NSString* const DEFAULT_RESOURCE_FILE_NAME = @"tutbyportal";
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
         FeedResource* resource = [self.feedsResources objectAtIndex:indexPath.row];
-        [[FeedResourceService sharedFeedResourceService] removeFeedResource:resource];
+        [[SQLFeedResourceService sharedFeedResourceService] removeFeedResource:resource];
         //[[FileManager sharedFileManager] removeFeedResource:resource fromFile:MENU_FILE_NAME];
         [self.feedsResources removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationMiddle];

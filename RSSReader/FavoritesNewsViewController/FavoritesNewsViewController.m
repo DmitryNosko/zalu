@@ -12,7 +12,8 @@
 #import "WebViewController.h"
 #import "FileManager.h"
 #import "ReachabilityStatusChecker.h"
-#import "FeedItemService.h"
+#import "SQLFeedItemService.h"
+#import "SQLFeedResourceService.h"
 
 @interface FavoritesNewsViewController () <UITableViewDelegate, UITableViewDataSource, FavoritesNewsTableViewCellListener>
 @property (strong, nonatomic) UITableView* tableView;
@@ -35,7 +36,7 @@ static NSString* TXT_FORMAT_NAME = @".txt";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.feeds = [[FeedItemService sharedFeedItemService] favoriteFeedItems];
+    self.feeds = [[SQLFeedItemService sharedFeedItemService] favoriteFeedItems:[[SQLFeedResourceService sharedFeedResourceService] feedResources]];
     //self.feeds = [[FileManager sharedFileManager] readFeedItemsFile:FAVORITES_NEWS_FILE_NIME];
 }
 
@@ -89,7 +90,7 @@ static NSString* TXT_FORMAT_NAME = @".txt";
         //call itemService.update
        // self.feedItemWasUpdatedHandler(item);
         
-        [[FeedItemService sharedFeedItemService] updateFeedItem:item];
+        [[SQLFeedItemService sharedFeedItemService] updateFeedItem:item];
         
 //        [[FileManager sharedFileManager] removeFeedItem:item fromFile:FAVORITES_NEWS_FILE_NIME];
 //        [[FileManager sharedFileManager] removeString:item.link fromFile:FAVORITES_NEWS_LINKS];

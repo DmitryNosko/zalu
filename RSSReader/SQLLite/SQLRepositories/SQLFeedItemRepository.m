@@ -6,32 +6,42 @@
 //  Copyright © 2019 Dzmitry Noska. All rights reserved.
 //
 
-#import "FeedItemRepository.h"
+#import "SQLFeedItemRepository.h"
 #import "DBManager.h"
 
-@interface FeedItemRepository()
+@interface SQLFeedItemRepository()
 @property (strong, nonatomic) NSDateFormatter* dateFormatter;
 @end
 
 static NSString* const INSERT_FEEDITEM = @"INSERT INTO FeedItem (itemTitle, link, pubDate, itemDescription, enclousure, imageURL, isFavorite, isReadingInProgress, isReadingComplite, isAvailable, resourceURL, resourceID) VALUES (\"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", \"%@\")";
+
 static NSString* const UPDATE_FEEDITEM = @"UPDATE FeedItem SET isFavorite = \"%@\", isReadingInProgress = \"%@\", isReadingComplite = \"%@\", isAvailable = \"%@\" WHERE ID = \"%@\"";
-static NSString* const SELECT_FEEDITEM = @"SELECT fi.ID, fi.itemTitle, fi.link, fi.pubDate, fi.itemDescription, fi.enclousure, fi.imageURL, fi.isFavorite, fi.isReadingInProgress, fi.isReadingComplite, fi.isAvailable, fi.resourceURL, fr.ID, fr.name, fr.url FROM FeedItem AS fi JOIN FeedResource AS fr ON fi.resourceID = fr.ID WHERE fi.resourceID = \"%@\"";
-static const char* SELECT_FAVORITE_FEEDITEM = "SELECT fi.ID, fi.itemTitle, fi.link, fi.pubDate, fi.itemDescription, fi.enclousure, fi.imageURL, fi.isFavorite, fi.isReadingInProgress, fi.isReadingComplite, fi.isAvailable, fi.resourceURL FROM FeedItem AS fi WHERE fi.isFavorite = 1;";
-static const char* SELECT_FAVORITE_FEEDITEM_URL = "SELECT fi.link FROM FeedItem AS fi WHERE fi.isFavorite = 1";
-static const char* SELECT_READING_IN_PROGRESS_FEEDITEM_URL = "SELECT fi.link FROM FeedItem AS fi WHERE fi.isReadingInProgress = 1";
-static const char* SELECT_READING_COMPLITE_FEEDITEM_URL = "SELECT fi.link FROM FeedItem AS fi WHERE fi.isReadingComplite = 1";
+
+static NSString* const SELECT_FEEDITEM = @"SELECT fi.ID, fi.itemTitle, fi.link, fi.pubDate, fi.itemDescription, fi.enclousure, fi.imageURL, fi.isFavorite, fi.isReadingInProgress, fi.isReadingComplite, fi.isAvailable, fi.resourceURL, fr.ID, fr.name, fr.url FROM FeedItem AS fi JOIN FeedResource AS fr ON fi.resourceID = fr.ID WHERE fi.resourceID = \"%@\" AND fi.isReadingComplite = 0";
+
+static NSString* const SELECT_FAVORITE_FEEDITEM = @"SELECT fi.ID, fi.itemTitle, fi.link, fi.pubDate, fi.itemDescription, fi.enclousure, fi.imageURL, fi.isFavorite, fi.isReadingInProgress, fi.isReadingComplite, fi.isAvailable, fi.resourceURL FROM FeedItem AS fi WHERE fi.resourceID IN (%@) AND fi.isFavorite = 1;";
+
+static NSString* const SELECT_FAVORITE_FEEDITEM_URL = @"SELECT fi.link FROM FeedItem AS fi WHERE fi.resourceID IN (%@) AND fi.isFavorite = 1";
+
+static NSString* const SELECT_READING_IN_PROGRESS_FEEDITEM_URL = @"SELECT fi.link FROM FeedItem AS fi WHERE fi.resourceID IN (%@) AND fi.isReadingInProgress = 1 AND fi.isReadingComplite = 0";
+
+static NSString* const SELECT_READING_COMPLITE_FEEDITEM_URL = @"SELECT fi.link FROM FeedItem AS fi WHERE fi.resourceID IN (%@) AND fi.isReadingComplite = 1";
+
 static NSString* const DELETE_FEEDITEM = @"DELETE FROM FeedItem WHERE FeedItem.id = \"%@\"";
+
 static NSString* const DELETE_FEEDITEM_BY_RESOURCE_ID = @"DELETE FROM FeedItem WHERE FeedItem.resourceID = \"%@\"";
+
 static const char* DELETE_ALL_FEEDITEMS = "DELETE FROM FeedItem";
 
-@implementation FeedItemRepository
 
-static FeedItemRepository* shared;
+@implementation SQLFeedItemRepository
+
+static SQLFeedItemRepository* shared;
 
 +(instancetype) sharedFeedItemRepository {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        shared = [FeedItemRepository new];
+        shared = [SQLFeedItemRepository new];
     });
     return shared;
 }
@@ -222,15 +232,17 @@ static FeedItemRepository* shared;
     }
 }
 
-- (NSMutableArray<FeedItem *>*) favoriteFeedItems {
+- (NSMutableArray<FeedItem *>*) favoriteFeedItems:(NSMutableArray<NSNumber *>*) resourcesIDs {
     
     const char *dbpath = [[[DBManager sharedDBManager] dataBasePath] UTF8String];
     sqlite3_stmt *statement;
     NSMutableArray<FeedItem *>* resources = [NSMutableArray array];
     
     if (sqlite3_open(dbpath, &rssDataBase) == SQLITE_OK) {
+
+        const char *selectFavoriteItemsStatement = [[NSString stringWithFormat:SELECT_FAVORITE_FEEDITEM, [self prepareQueryParameters:resourcesIDs]] UTF8String];
         
-        if (sqlite3_prepare_v2(rssDataBase, SELECT_FAVORITE_FEEDITEM, -1, &statement, NULL) == SQLITE_OK) {
+        if (sqlite3_prepare_v2(rssDataBase, selectFavoriteItemsStatement, -1, &statement, NULL) == SQLITE_OK) {
             
             while (sqlite3_step(statement) == SQLITE_ROW) {
                 
@@ -270,14 +282,17 @@ static FeedItemRepository* shared;
     return resources;
 }
 
-- (NSMutableArray<NSString *>*) favoriteFeedItemLinks {
+- (NSMutableArray<NSString *>*) favoriteFeedItemLinks:(NSMutableArray<NSNumber *>*) resourcesIDs {
     
     const char *dbpath = [[[DBManager sharedDBManager] dataBasePath] UTF8String];
     sqlite3_stmt *statement;
     NSMutableArray<NSString *>* links = [NSMutableArray array];
     
     if (sqlite3_open(dbpath, &rssDataBase) == SQLITE_OK) {
-        if (sqlite3_prepare_v2(rssDataBase, SELECT_FAVORITE_FEEDITEM_URL, -1, &statement, NULL) == SQLITE_OK) {
+        
+        const char *selectFavoriteItemLinksStatement = [[NSString stringWithFormat:SELECT_FAVORITE_FEEDITEM_URL, [self prepareQueryParameters:resourcesIDs]] UTF8String];
+        
+        if (sqlite3_prepare_v2(rssDataBase, selectFavoriteItemLinksStatement, -1, &statement, NULL) == SQLITE_OK) {
             
             while (sqlite3_step(statement) == SQLITE_ROW) {
                 
@@ -292,13 +307,16 @@ static FeedItemRepository* shared;
     return links;
 }
 
-- (NSMutableArray<NSString *>*) readingInProgressFeedItemLinks {
+- (NSMutableArray<NSString *>*) readingInProgressFeedItemLinks:(NSMutableArray<NSNumber *>*) resourcesIDs {
     const char *dbpath = [[[DBManager sharedDBManager] dataBasePath] UTF8String];
     sqlite3_stmt *statement;
     NSMutableArray<NSString *>* links = [NSMutableArray array];
     
     if (sqlite3_open(dbpath, &rssDataBase) == SQLITE_OK) {
-        if (sqlite3_prepare_v2(rssDataBase, SELECT_READING_IN_PROGRESS_FEEDITEM_URL, -1, &statement, NULL) == SQLITE_OK) {
+        
+        const char *selectReadingInProgressFeedItemLinksStatement = [[NSString stringWithFormat:SELECT_READING_IN_PROGRESS_FEEDITEM_URL, [self prepareQueryParameters:resourcesIDs]] UTF8String];
+        
+        if (sqlite3_prepare_v2(rssDataBase, selectReadingInProgressFeedItemLinksStatement, -1, &statement, NULL) == SQLITE_OK) {
             while (sqlite3_step(statement) == SQLITE_ROW) {
                 
                 NSString* link = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 0)];
@@ -312,13 +330,16 @@ static FeedItemRepository* shared;
     return links;
 }
 
-- (NSMutableArray<NSString *>*) readingCompliteFeedItemLinks {
+- (NSMutableArray<NSString *>*) readingCompliteFeedItemLinks:(NSMutableArray<NSNumber *>*) resourcesIDs {
     const char *dbpath = [[[DBManager sharedDBManager] dataBasePath] UTF8String];
     sqlite3_stmt *statement;
     NSMutableArray<NSString *>* links = [NSMutableArray array];
     
     if (sqlite3_open(dbpath, &rssDataBase) == SQLITE_OK) {
-        if (sqlite3_prepare_v2(rssDataBase, SELECT_READING_COMPLITE_FEEDITEM_URL, -1, &statement, NULL) == SQLITE_OK) {
+        
+        const char *selectReadingCompliteFeedItemLinksStatement = [[NSString stringWithFormat:SELECT_READING_COMPLITE_FEEDITEM_URL, [self prepareQueryParameters:resourcesIDs]] UTF8String];
+        
+        if (sqlite3_prepare_v2(rssDataBase, selectReadingCompliteFeedItemLinksStatement, -1, &statement, NULL) == SQLITE_OK) {
             while (sqlite3_step(statement) == SQLITE_ROW) {
                 
                 NSString* link = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 0)];
@@ -330,6 +351,15 @@ static FeedItemRepository* shared;
     }
     
     return links;
+}
+
+- (NSString *) prepareQueryParameters:(NSArray<id>*) parameters {
+    NSMutableArray<NSString *>* params = [NSMutableArray new];
+    for (id obj in parameters) {
+        [params addObject:[NSString stringWithFormat:@"\"%@\"", obj]];
+    }
+    
+    return [params componentsJoinedByString:@","];
 }
 
 - (NSDate *) dateFromString:(NSString *) dateString {

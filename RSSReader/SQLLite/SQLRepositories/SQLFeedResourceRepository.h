@@ -1,5 +1,5 @@
 //
-//  FeedResourceService.h
+//  FeedResourceRepository.h
 //  RSSReader
 //
 //  Created by Dzmitry Noska on 9/13/19.
@@ -8,9 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "FeedResource.h"
+#import <sqlite3.h>
 
-@interface FeedResourceService : NSObject
-+(instancetype) sharedFeedResourceService;
+@interface SQLFeedResourceRepository : NSObject {
+    sqlite3* rssDataBase;
+}
+
++(instancetype) sharedFeedResourceRepository;
 - (FeedResource *) addFeedResource:(FeedResource *) resource;
 - (void) removeFeedResource:(FeedResource *) resource;
 - (NSMutableArray<FeedResource *>*) feedResources;

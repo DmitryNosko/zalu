@@ -6,28 +6,27 @@
 //  Copyright © 2019 Dzmitry Noska. All rights reserved.
 //
 
-#import "FeedItemService.h"
-#import "FeedItemRepository.h"
+#import "SQLFeedItemService.h"
+#import "SQLFeedItemRepository.h"
 
-@interface FeedItemService()
-@property (strong, nonatomic) FeedItemRepository* feedItemRepository;
+@interface SQLFeedItemService()
+@property (strong, nonatomic) SQLFeedItemRepository* feedItemRepository;
 @end
 
-@implementation FeedItemService
+@implementation SQLFeedItemService
 
-static FeedItemService* shared;
+static SQLFeedItemService* shared;
 
 +(instancetype) sharedFeedItemService {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        shared = [FeedItemService new];
-        shared.feedItemRepository = [FeedItemRepository sharedFeedItemRepository];
+        shared = [SQLFeedItemService new];
+        shared.feedItemRepository = [SQLFeedItemRepository sharedFeedItemRepository];
     });
     return shared;
 }
 
 - (NSMutableArray<FeedItem *>*) cleanSaveFeedItems:(NSMutableArray<FeedItem *>*) items {
-    //[self.feedItemRepository removeAllFeedItems];
     FeedResource* resource = [items firstObject].resource;
     [self.feedItemRepository removeFeedItemForResource:resource.identifier];
     NSMutableArray<FeedItem *>* createdItems = [self addFeedItems:items];
@@ -60,20 +59,20 @@ static FeedItemService* shared;
     [self.feedItemRepository removeFeedItem:item];
 }
 
-- (NSMutableArray<FeedItem *>*) favoriteFeedItems {
-    return [self.feedItemRepository favoriteFeedItems];
+- (NSMutableArray<FeedItem *>*) favoriteFeedItems:(NSMutableArray<FeedResource *>*) resources {
+    return [self.feedItemRepository favoriteFeedItems:[resources valueForKey:@"identifier"]];
 }
 
-- (NSMutableArray<NSString *>*) favoriteFeedItemLinks{
-    return [self.feedItemRepository favoriteFeedItemLinks];
+- (NSMutableArray<NSString *>*) favoriteFeedItemLinks:(NSMutableArray<FeedResource *>*) resources {
+    return [self.feedItemRepository favoriteFeedItemLinks:[resources valueForKey:@"identifier"]];
 }
 
-- (NSMutableArray<NSString *>*) readingInProgressFeedItemLinks {
-    return [self.feedItemRepository readingInProgressFeedItemLinks];
+- (NSMutableArray<NSString *>*) readingInProgressFeedItemLinks:(NSMutableArray<FeedResource *>*) resources {
+    return [self.feedItemRepository readingInProgressFeedItemLinks:[resources valueForKey:@"identifier"]];
 }
 
-- (NSMutableArray<NSString *>*) readingCompliteFeedItemLinks {
-    return [self.feedItemRepository readingCompliteFeedItemLinks];
+- (NSMutableArray<NSString *>*) readingCompliteFeedItemLinks:(NSMutableArray<FeedResource *>*) resources {
+    return [self.feedItemRepository readingCompliteFeedItemLinks:[resources valueForKey:@"identifier"]];
 }
 
 @end

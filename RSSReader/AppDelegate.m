@@ -14,7 +14,7 @@
 //#import "FileManager.h"
 #import "FavoritesNewsViewController.h"
 #import "DBContextCreator.h"
-#import "FeedItemService.h"
+#import "SQLFeedItemService.h"
 
 @interface AppDelegate ()
 @end

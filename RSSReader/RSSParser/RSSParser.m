@@ -15,7 +15,9 @@
 @property (strong, nonatomic) NSXMLParser* parser;
 @property (strong, nonatomic) NSURL* resourceURL;
 @end
+
 static NSString* PATTERN_FOR_VALIDATION = @"<\/?[A-Za-z]+[^>]*>";
+
 @implementation RSSParser
 
 #pragma mark - ParserMethods

@@ -6,7 +6,7 @@
 //  Copyright © 2019 Dzmitry Noska. All rights reserved.
 //
 
-#import "FeedResourceRepository.h"
+#import "SQLFeedResourceRepository.h"
 #import "DBManager.h"
 
 static NSString* const INSERT_FEEDRESOURCE_SQL = @"INSERT INTO FeedResource (name, url) VALUES (\"%@\", \"%@\")";
@@ -15,14 +15,14 @@ static NSString* const SELECT_FEEDRESOURSE_BY_URL = @"SELECT fr.ID, fr.name, fr.
 static const char* SELECT_FEEDRESOURCE_SQL = "SELECT ID, name, url FROM FeedResource";
 
 
-@implementation FeedResourceRepository
+@implementation SQLFeedResourceRepository
 
-static FeedResourceRepository* shared;
+static SQLFeedResourceRepository* shared;
 
 +(instancetype) sharedFeedResourceRepository {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        shared = [FeedResourceRepository new];
+        shared = [SQLFeedResourceRepository new];
     });
     return shared;
 }

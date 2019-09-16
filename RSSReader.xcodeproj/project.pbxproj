@@ -30,13 +30,17 @@
 		7865E8452328D5F500111BF3 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7865E8442328D5F500111BF3 /* libsqlite3.tbd */; };
 		7865E86A232BCCB700111BF3 /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7865E869232BCCB700111BF3 /* DBManager.m */; };
 		7865E86D232BCCE500111BF3 /* DBContextCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7865E86C232BCCE500111BF3 /* DBContextCreator.m */; };
-		7865E870232BCD1E00111BF3 /* FeedItemService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7865E86F232BCD1E00111BF3 /* FeedItemService.m */; };
-		7865E873232BCD4200111BF3 /* FeedResourceService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7865E872232BCD4200111BF3 /* FeedResourceService.m */; };
-		7865E876232BCD6F00111BF3 /* FeedItemRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 7865E875232BCD6F00111BF3 /* FeedItemRepository.m */; };
-		7865E879232BCD9800111BF3 /* FeedResourceRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 7865E878232BCD9800111BF3 /* FeedResourceRepository.m */; };
+		7865E870232BCD1E00111BF3 /* SQLFeedItemService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7865E86F232BCD1E00111BF3 /* SQLFeedItemService.m */; };
+		7865E873232BCD4200111BF3 /* SQLFeedResourceService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7865E872232BCD4200111BF3 /* SQLFeedResourceService.m */; };
+		7865E876232BCD6F00111BF3 /* SQLFeedItemRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 7865E875232BCD6F00111BF3 /* SQLFeedItemRepository.m */; };
+		7865E879232BCD9800111BF3 /* SQLFeedResourceRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 7865E878232BCD9800111BF3 /* SQLFeedResourceRepository.m */; };
 		78FD5E502315036400510D99 /* MainTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FD5E4F2315036400510D99 /* MainTableViewCell.m */; };
 		78FD5E5323152A1A00510D99 /* DetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FD5E5223152A1A00510D99 /* DetailsViewController.m */; };
 		78FD5E56231537DF00510D99 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FD5E55231537DF00510D99 /* Reachability.m */; };
+		CE50447523300467009C40E6 /* FileFeedResourceRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = CE50447423300467009C40E6 /* FileFeedResourceRepository.m */; };
+		CE5044782330047C009C40E6 /* FileFeedItemRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = CE5044772330047C009C40E6 /* FileFeedItemRepository.m */; };
+		CE50447B23300498009C40E6 /* FileFeedItemService.m in Sources */ = {isa = PBXBuildFile; fileRef = CE50447A23300498009C40E6 /* FileFeedItemService.m */; };
+		CE50447E233004AA009C40E6 /* FileFeedResourceService.m in Sources */ = {isa = PBXBuildFile; fileRef = CE50447D233004AA009C40E6 /* FileFeedResourceService.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -83,20 +87,30 @@
 		7865E869232BCCB700111BF3 /* DBManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DBManager.m; sourceTree = "<group>"; };
 		7865E86B232BCCE500111BF3 /* DBContextCreator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DBContextCreator.h; sourceTree = "<group>"; };
 		7865E86C232BCCE500111BF3 /* DBContextCreator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DBContextCreator.m; sourceTree = "<group>"; };
-		7865E86E232BCD1E00111BF3 /* FeedItemService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedItemService.h; sourceTree = "<group>"; };
-		7865E86F232BCD1E00111BF3 /* FeedItemService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeedItemService.m; sourceTree = "<group>"; };
-		7865E871232BCD4200111BF3 /* FeedResourceService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedResourceService.h; sourceTree = "<group>"; };
-		7865E872232BCD4200111BF3 /* FeedResourceService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeedResourceService.m; sourceTree = "<group>"; };
-		7865E874232BCD6F00111BF3 /* FeedItemRepository.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedItemRepository.h; sourceTree = "<group>"; };
-		7865E875232BCD6F00111BF3 /* FeedItemRepository.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeedItemRepository.m; sourceTree = "<group>"; };
-		7865E877232BCD9800111BF3 /* FeedResourceRepository.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedResourceRepository.h; sourceTree = "<group>"; };
-		7865E878232BCD9800111BF3 /* FeedResourceRepository.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeedResourceRepository.m; sourceTree = "<group>"; };
+		7865E86E232BCD1E00111BF3 /* SQLFeedItemService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQLFeedItemService.h; sourceTree = "<group>"; };
+		7865E86F232BCD1E00111BF3 /* SQLFeedItemService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SQLFeedItemService.m; sourceTree = "<group>"; };
+		7865E871232BCD4200111BF3 /* SQLFeedResourceService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQLFeedResourceService.h; sourceTree = "<group>"; };
+		7865E872232BCD4200111BF3 /* SQLFeedResourceService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SQLFeedResourceService.m; sourceTree = "<group>"; };
+		7865E874232BCD6F00111BF3 /* SQLFeedItemRepository.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQLFeedItemRepository.h; sourceTree = "<group>"; };
+		7865E875232BCD6F00111BF3 /* SQLFeedItemRepository.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SQLFeedItemRepository.m; sourceTree = "<group>"; };
+		7865E877232BCD9800111BF3 /* SQLFeedResourceRepository.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQLFeedResourceRepository.h; sourceTree = "<group>"; };
+		7865E878232BCD9800111BF3 /* SQLFeedResourceRepository.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SQLFeedResourceRepository.m; sourceTree = "<group>"; };
 		78FD5E4E2315036400510D99 /* MainTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainTableViewCell.h; sourceTree = "<group>"; };
 		78FD5E4F2315036400510D99 /* MainTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainTableViewCell.m; sourceTree = "<group>"; };
 		78FD5E5123152A1A00510D99 /* DetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailsViewController.h; sourceTree = "<group>"; };
 		78FD5E5223152A1A00510D99 /* DetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailsViewController.m; sourceTree = "<group>"; };
 		78FD5E54231537DF00510D99 /* Reachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		78FD5E55231537DF00510D99 /* Reachability.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		CE50447323300467009C40E6 /* FileFeedResourceRepository.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileFeedResourceRepository.h; sourceTree = "<group>"; };
+		CE50447423300467009C40E6 /* FileFeedResourceRepository.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FileFeedResourceRepository.m; sourceTree = "<group>"; };
+		CE5044762330047C009C40E6 /* FileFeedItemRepository.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileFeedItemRepository.h; sourceTree = "<group>"; };
+		CE5044772330047C009C40E6 /* FileFeedItemRepository.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FileFeedItemRepository.m; sourceTree = "<group>"; };
+		CE50447923300498009C40E6 /* FileFeedItemService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileFeedItemService.h; sourceTree = "<group>"; };
+		CE50447A23300498009C40E6 /* FileFeedItemService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FileFeedItemService.m; sourceTree = "<group>"; };
+		CE50447C233004AA009C40E6 /* FileFeedResourceService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileFeedResourceService.h; sourceTree = "<group>"; };
+		CE50447D233004AA009C40E6 /* FileFeedResourceService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FileFeedResourceService.m; sourceTree = "<group>"; };
+		CE504480233004EA009C40E6 /* FeedItemServiceProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedItemServiceProtocol.h; sourceTree = "<group>"; };
+		CE504481233004FE009C40E6 /* FeedResourceServiceProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedResourceServiceProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,8 +145,9 @@
 		780272942313EBFF00EB860B /* RSSReader */ = {
 			isa = PBXGroup;
 			children = (
+				CE50447F233004C4009C40E6 /* StoragesService */,
 				7865E863232BCBA400111BF3 /* SQLLite */,
-				78072722231EA429000BF435 /* FileManager */,
+				78072722231EA429000BF435 /* FileStorage */,
 				780726F12319123F000BF435 /* Networking */,
 				780726F02319122D000BF435 /* RSSParser */,
 				780726EF23191207000BF435 /* Model */,
@@ -239,13 +254,15 @@
 			path = Networking;
 			sourceTree = "<group>";
 		};
-		78072722231EA429000BF435 /* FileManager */ = {
+		78072722231EA429000BF435 /* FileStorage */ = {
 			isa = PBXGroup;
 			children = (
+				CE50447223300447009C40E6 /* FileService */,
+				CE50447123300438009C40E6 /* FileRepository */,
 				780726D52317D40E000BF435 /* FileManager.h */,
 				780726D62317D40E000BF435 /* FileManager.m */,
 			);
-			path = FileManager;
+			path = FileStorage;
 			sourceTree = "<group>";
 		};
 		78072729231EA611000BF435 /* FavoritesNewsViewController */ = {
@@ -280,10 +297,10 @@
 		7865E865232BCC4B00111BF3 /* SQLService */ = {
 			isa = PBXGroup;
 			children = (
-				7865E86E232BCD1E00111BF3 /* FeedItemService.h */,
-				7865E86F232BCD1E00111BF3 /* FeedItemService.m */,
-				7865E871232BCD4200111BF3 /* FeedResourceService.h */,
-				7865E872232BCD4200111BF3 /* FeedResourceService.m */,
+				7865E86E232BCD1E00111BF3 /* SQLFeedItemService.h */,
+				7865E86F232BCD1E00111BF3 /* SQLFeedItemService.m */,
+				7865E871232BCD4200111BF3 /* SQLFeedResourceService.h */,
+				7865E872232BCD4200111BF3 /* SQLFeedResourceService.m */,
 			);
 			path = SQLService;
 			sourceTree = "<group>";
@@ -302,12 +319,43 @@
 		7865E867232BCC8400111BF3 /* SQLRepositories */ = {
 			isa = PBXGroup;
 			children = (
-				7865E874232BCD6F00111BF3 /* FeedItemRepository.h */,
-				7865E875232BCD6F00111BF3 /* FeedItemRepository.m */,
-				7865E877232BCD9800111BF3 /* FeedResourceRepository.h */,
-				7865E878232BCD9800111BF3 /* FeedResourceRepository.m */,
+				7865E874232BCD6F00111BF3 /* SQLFeedItemRepository.h */,
+				7865E875232BCD6F00111BF3 /* SQLFeedItemRepository.m */,
+				7865E877232BCD9800111BF3 /* SQLFeedResourceRepository.h */,
+				7865E878232BCD9800111BF3 /* SQLFeedResourceRepository.m */,
 			);
 			path = SQLRepositories;
+			sourceTree = "<group>";
+		};
+		CE50447123300438009C40E6 /* FileRepository */ = {
+			isa = PBXGroup;
+			children = (
+				CE50447323300467009C40E6 /* FileFeedResourceRepository.h */,
+				CE50447423300467009C40E6 /* FileFeedResourceRepository.m */,
+				CE5044762330047C009C40E6 /* FileFeedItemRepository.h */,
+				CE5044772330047C009C40E6 /* FileFeedItemRepository.m */,
+			);
+			path = FileRepository;
+			sourceTree = "<group>";
+		};
+		CE50447223300447009C40E6 /* FileService */ = {
+			isa = PBXGroup;
+			children = (
+				CE50447923300498009C40E6 /* FileFeedItemService.h */,
+				CE50447A23300498009C40E6 /* FileFeedItemService.m */,
+				CE50447C233004AA009C40E6 /* FileFeedResourceService.h */,
+				CE50447D233004AA009C40E6 /* FileFeedResourceService.m */,
+			);
+			path = FileService;
+			sourceTree = "<group>";
+		};
+		CE50447F233004C4009C40E6 /* StoragesService */ = {
+			isa = PBXGroup;
+			children = (
+				CE504480233004EA009C40E6 /* FeedItemServiceProtocol.h */,
+				CE504481233004FE009C40E6 /* FeedResourceServiceProtocol.h */,
+			);
+			path = StoragesService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -381,29 +429,33 @@
 			buildActionMask = 2147483647;
 			files = (
 				7865E86A232BCCB700111BF3 /* DBManager.m in Sources */,
-				7865E879232BCD9800111BF3 /* FeedResourceRepository.m in Sources */,
+				7865E879232BCD9800111BF3 /* SQLFeedResourceRepository.m in Sources */,
 				780272A02313EC0000EB860B /* RSSReader.xcdatamodeld in Sources */,
 				7807272F231EA683000BF435 /* FavoritesNewsTableViewCell.m in Sources */,
 				780272BE23141E7300EB860B /* WebViewController.m in Sources */,
 				780726D72317D40E000BF435 /* FileManager.m in Sources */,
 				780726E6231902BD000BF435 /* RSSParser.m in Sources */,
+				CE50447B23300498009C40E6 /* FileFeedItemService.m in Sources */,
 				78FD5E56231537DF00510D99 /* Reachability.m in Sources */,
 				780726DA2317F8EE000BF435 /* ContainerViewController.m in Sources */,
 				78FD5E502315036400510D99 /* MainTableViewCell.m in Sources */,
+				CE5044782330047C009C40E6 /* FileFeedItemRepository.m in Sources */,
 				7807273E231FFBA1000BF435 /* ReachabilityStatusChecker.m in Sources */,
-				7865E876232BCD6F00111BF3 /* FeedItemRepository.m in Sources */,
+				7865E876232BCD6F00111BF3 /* SQLFeedItemRepository.m in Sources */,
 				780272A82313EC0100EB860B /* main.m in Sources */,
 				78FD5E5323152A1A00510D99 /* DetailsViewController.m in Sources */,
 				780726E923191183000BF435 /* MenuHeaderView.m in Sources */,
-				7865E873232BCD4200111BF3 /* FeedResourceService.m in Sources */,
+				7865E873232BCD4200111BF3 /* SQLFeedResourceService.m in Sources */,
 				780272972313EBFF00EB860B /* AppDelegate.m in Sources */,
 				7865E86D232BCCE500111BF3 /* DBContextCreator.m in Sources */,
 				780726DD2317FAAF000BF435 /* MenuViewController.m in Sources */,
-				7865E870232BCD1E00111BF3 /* FeedItemService.m in Sources */,
+				CE50447523300467009C40E6 /* FileFeedResourceRepository.m in Sources */,
+				7865E870232BCD1E00111BF3 /* SQLFeedItemService.m in Sources */,
 				780726E023180938000BF435 /* MenuTableViewCell.m in Sources */,
 				78072725231EA4A3000BF435 /* RSSURLValidator.m in Sources */,
 				780272B52313F5FA00EB860B /* MainViewController.m in Sources */,
 				78072728231EA501000BF435 /* FeedResource.m in Sources */,
+				CE50447E233004AA009C40E6 /* FileFeedResourceService.m in Sources */,
 				780726E3231901DA000BF435 /* FeedItem.m in Sources */,
 				7807272C231EA651000BF435 /* FavoritesNewsViewController.m in Sources */,
 			);

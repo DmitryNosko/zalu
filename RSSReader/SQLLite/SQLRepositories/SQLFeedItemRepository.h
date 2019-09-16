@@ -10,7 +10,7 @@
 #import "FeedItem.h"
 #import <sqlite3.h>
 
-@interface FeedItemRepository : NSObject {
+@interface SQLFeedItemRepository : NSObject {
     sqlite3* rssDataBase;
 }
 
@@ -21,8 +21,8 @@
 - (void) removeFeedItem:(FeedItem *) item;
 - (void) removeFeedItemForResource:(NSInteger) identifier;
 - (void) removeAllFeedItems;
-- (NSMutableArray<FeedItem *>*) favoriteFeedItems;
-- (NSMutableArray<NSString *>*) favoriteFeedItemLinks;
-- (NSMutableArray<NSString *>*) readingInProgressFeedItemLinks;
-- (NSMutableArray<NSString *>*) readingCompliteFeedItemLinks;
+- (NSMutableArray<FeedItem *>*) favoriteFeedItems:(NSMutableArray<NSNumber *>*) resourcesIDs;
+- (NSMutableArray<NSString *>*) favoriteFeedItemLinks:(NSMutableArray<NSNumber *>*) resourcesIDs;
+- (NSMutableArray<NSString *>*) readingInProgressFeedItemLinks:(NSMutableArray<NSNumber *>*) resourcesIDs;
+- (NSMutableArray<NSString *>*) readingCompliteFeedItemLinks:(NSMutableArray<NSNumber *>*) resourcesIDs;
 @end

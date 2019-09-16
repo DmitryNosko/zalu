@@ -15,8 +15,8 @@
 #import "MenuViewController.h"
 #import "FileManager.h"
 #import "ReachabilityStatusChecker.h"
-#import "FeedResourceService.h"
-#import "FeedItemService.h"
+#import "SQLFeedResourceService.h"
+#import "SQLFeedItemService.h"
 
 @interface MainViewController () <UITableViewDataSource, UITableViewDelegate, MainTableViewCellListener, WebViewControllerListener>
 @property (strong, nonatomic) UITableView* tableView;
@@ -78,10 +78,10 @@ static NSString* FAVORITES_NEWS_LINKS = @"favoritiesNewsLinks.txt";
     
     self.displayedFeeds = [[NSMutableArray alloc] init];
     self.parsedFeeds = [[NSMutableArray alloc] init];
-    FeedResource* defautlResource = [[FeedResourceService sharedFeedResourceService] resourceByURL:[NSURL URLWithString:URL_TO_PARSE]];
+    FeedResource* defautlResource = [[SQLFeedResourceService sharedFeedResourceService] resourceByURL:[NSURL URLWithString:URL_TO_PARSE]];
     
     if (!defautlResource) {
-        defautlResource = [[FeedResourceService sharedFeedResourceService] addFeedResource:
+        defautlResource = [[SQLFeedResourceService sharedFeedResourceService] addFeedResource:
                            [[FeedResource alloc] initWithName:TUT_BY_NEWS_FILE_NAME url:[NSURL URLWithString:URL_TO_PARSE]]
                            ];
     }
@@ -89,10 +89,10 @@ static NSString* FAVORITES_NEWS_LINKS = @"favoritiesNewsLinks.txt";
     self.feedResourceByURL = [[NSMutableDictionary alloc] initWithObjectsAndKeys:defautlResource, defautlResource.url, nil];
     
     //self.readedItemsLinks = [[FileManager sharedFileManager] readStringsFromFile:READED_NEWS];
-    self.readingCompliteItemsLinks = [[FeedItemService sharedFeedItemService] readingCompliteFeedItemLinks];
+    self.readingCompliteItemsLinks = [[SQLFeedItemService sharedFeedItemService] readingCompliteFeedItemLinks:[[NSMutableArray alloc] initWithArray:[self.feedResourceByURL allValues]]];
     
     //self.readingInProgressItemsLinks = [[FileManager sharedFileManager] readStringsFromFile:READING_IN_PROGRESS];
-    self.readingInProgressItemsLinks = [[FeedItemService sharedFeedItemService] readingInProgressFeedItemLinks];
+    self.readingInProgressItemsLinks = [[SQLFeedItemService sharedFeedItemService] readingInProgressFeedItemLinks:[[NSMutableArray alloc] initWithArray:[self.feedResourceByURL allValues]]];
     
     self.rssParser = [[RSSParser alloc] init];
     
@@ -109,7 +109,7 @@ static NSString* FAVORITES_NEWS_LINKS = @"favoritiesNewsLinks.txt";
         [self.rssParser rssParseWithURL:[NSURL URLWithString:URL_TO_PARSE]];
     } else {
         [self showNotInternerConnectionAlert];
-        self.displayedFeeds = [[FeedItemService sharedFeedItemService] feedItemsForResource:defautlResource];
+        self.displayedFeeds = [[SQLFeedItemService sharedFeedItemService] feedItemsForResource:defautlResource];
         //self.displayedFeeds = [[FileManager sharedFileManager] readFeedItemsFile:TUT_BY_NEWS_FILE_NAME];
     }
     
@@ -122,7 +122,7 @@ static NSString* FAVORITES_NEWS_LINKS = @"favoritiesNewsLinks.txt";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     //self.displayedFeeds = [[FeedItemService sharedFeedItemService] feedItems];
-    self.favoriteItemsLinks = [[FeedItemService sharedFeedItemService] favoriteFeedItemLinks];
+    self.favoriteItemsLinks = [[SQLFeedItemService sharedFeedItemService] favoriteFeedItemLinks:[[NSMutableArray alloc] initWithArray:[self.feedResourceByURL allValues]]];
     //self.favoritesItemsLinks = [[FileManager sharedFileManager] readStringsFromFile:FAVORITES_NEWS_LINKS];// create handler for this
     [self.tableView reloadData];
 }
@@ -212,7 +212,7 @@ static NSString* FAVORITES_NEWS_LINKS = @"favoritiesNewsLinks.txt";
         item.isReadingInProgress = YES;
         item.resource = resource;
         NSThread* thread = [[NSThread alloc] initWithBlock:^{
-            [[FeedItemService sharedFeedItemService] updateFeedItem:item];
+            [[SQLFeedItemService sharedFeedItemService] updateFeedItem:item];
             [self.readingInProgressItemsLinks addObject:item.link];
             //[[FileManager sharedFileManager] saveString:item.link toFile:READING_IN_PROGRESS];
             //[[FileManager sharedFileManager] updateFeedItem:item atIndex:indexPath.row inFile:[NSString stringWithFormat:@"%@%@", resource.name, TXT_FORMAT_NAME]];
@@ -301,7 +301,7 @@ static NSString* FAVORITES_NEWS_LINKS = @"favoritiesNewsLinks.txt";
         item.isFavorite = NO;
         [self.favoriteItemsLinks removeObject:item.link];
         NSThread* thread = [[NSThread alloc] initWithBlock:^{
-            [[FeedItemService sharedFeedItemService] updateFeedItem:item];
+            [[SQLFeedItemService sharedFeedItemService] updateFeedItem:item];
 //            [[FileManager sharedFileManager] removeFeedItem:item fromFile:FAVORITES_NEWS_FILE_NIME];
 //            [[FileManager sharedFileManager] removeString:item.link fromFile:FAVORITES_NEWS_LINKS];
 //            [[FileManager sharedFileManager] updateFeedItem:item atIndex:indexPath.row inFile:[NSString stringWithFormat:@"%@%@", resource.name, TXT_FORMAT_NAME]];
@@ -312,7 +312,7 @@ static NSString* FAVORITES_NEWS_LINKS = @"favoritiesNewsLinks.txt";
         item.isFavorite = YES;
         [self.favoriteItemsLinks addObject:item.link];
         NSThread* thread = [[NSThread alloc] initWithBlock:^{
-            [[FeedItemService sharedFeedItemService] updateFeedItem:item];
+            [[SQLFeedItemService sharedFeedItemService] updateFeedItem:item];
 //            [[FileManager sharedFileManager] saveFeedItem:item toFileWithName:FAVORITES_NEWS_FILE_NIME];
 //            [[FileManager sharedFileManager] saveString:item.link toFile:FAVORITES_NEWS_LINKS];
 //            [[FileManager sharedFileManager] updateFeedItem:item atIndex:indexPath.row inFile:[NSString stringWithFormat:@"%@%@", resource.name, TXT_FORMAT_NAME]];
@@ -335,7 +335,7 @@ static NSString* FAVORITES_NEWS_LINKS = @"favoritiesNewsLinks.txt";
     [thread start];
     [self.readingCompliteItemsLinks addObject:self.listenedItem.link];// same with file
     item.isReadingComplite = YES;
-    [[FeedItemService sharedFeedItemService] updateFeedItem:item];
+    [[SQLFeedItemService sharedFeedItemService] updateFeedItem:item];
     
     [self.displayedFeeds removeObjectAtIndex:self.selectedFeedItemIndexPath.row];
     [self.tableView deleteRowsAtIndexPaths:@[self.selectedFeedItemIndexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -509,7 +509,7 @@ static NSString* FAVORITES_NEWS_LINKS = @"favoritiesNewsLinks.txt";
     self.feedResourceWasChosenHandler = ^(FeedResource *resource) {
         //NSString* str = [NSString stringWithFormat:@"%@%@", resource.name, TXT_FORMAT_NAME];
         //NSMutableArray<FeedItem*>* items = [[FileManager sharedFileManager] readFeedItemsFile:str];
-        NSMutableArray<FeedItem*>* items = [[FeedItemService sharedFeedItemService] feedItemsForResource:resource];
+        NSMutableArray<FeedItem*>* items = [[SQLFeedItemService sharedFeedItemService] feedItemsForResource:resource];
         weakSelf.displayedFeeds = items;
         [weakSelf.tableView reloadData];
     };
@@ -518,12 +518,15 @@ static NSString* FAVORITES_NEWS_LINKS = @"favoritiesNewsLinks.txt";
 - (void) addParsedFeedItemToFeeds:(FeedItem* ) item {
     if (item) {
         item.resource = [self.feedResourceByURL objectForKey:item.resourceURL];
+        item.isReadingComplite = NO;
+        item.isReadingInProgress = [self.readingInProgressItemsLinks containsObject:item.link];
+        item.isFavorite = [self.favoriteItemsLinks containsObject:item.link];
         if (![self.readingCompliteItemsLinks containsObject:item.link]) {
-            item.isReadingInProgress = [self.readingInProgressItemsLinks containsObject:item.link];
-            item.isFavorite = [self.favoriteItemsLinks containsObject:item.link];
             [self.displayedFeeds addObject:item];
-            [self.parsedFeeds addObject:item];
+        } else {
+            item.isReadingComplite = YES;
         }
+        [self.parsedFeeds addObject:item];
     }
 }
 
@@ -544,9 +547,7 @@ static NSString* FAVORITES_NEWS_LINKS = @"favoritiesNewsLinks.txt";
         
         //[[FileManager sharedFileManager] createAndSaveFeedItems:weakSelf.displayedFeeds toFileWithName:[NSString stringWithFormat:@"%@%@", resource.name, TXT_FORMAT_NAME]];
         
-        NSMutableArray<FeedItem *>* contextItems = [[FeedItemService sharedFeedItemService] cleanSaveFeedItems:weakSelf.displayedFeeds];
-        weakSelf.displayedFeeds = contextItems;
-        weakSelf.parsedFeeds = contextItems;
+        [[SQLFeedItemService sharedFeedItemService] cleanSaveFeedItems:weakSelf.parsedFeeds];
         [weakSelf performSelectorOnMainThread:@selector(reloadDataHandler) withObject:nil waitUntilDone:NO];
     };
 }
